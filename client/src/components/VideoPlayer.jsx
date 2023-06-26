@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Grid, Typography, Paper } from '@mui/material';
 import { styled } from '@mui/system';
-
 import { SocketContext } from '../SocketContext';
+
 
 const StyledVideo = styled('video')({
   width: '550px',
@@ -11,28 +11,29 @@ const StyledVideo = styled('video')({
   },
 });
 
+
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: '10px',
   border: '2px solid black',
   margin: '10px',
 }));
 
+
 const VideoPlayer = () => {
-  const { name, callAccepted, myVideo, userVideo, callEnded, stream, call } = useContext(SocketContext);
-  const myVideoRef = useRef(myVideo);
-  const userVideoRef = useRef(userVideo);
+  const { name, callAccepted, myVideoRef, userVideoRef, callEnded, stream, call } = useContext(SocketContext);
 
   useEffect(() => {
     if (stream && myVideoRef.current) {
       myVideoRef.current.srcObject = stream;
     }
-  }, [stream]);
+  }, [stream, myVideoRef]);
 
+ 
   useEffect(() => {
     if (callAccepted && !callEnded && userVideoRef.current) {
-      userVideoRef.current.srcObject = call.stream;
+      userVideoRef.current.srcObject = call?.stream;
     }
-  }, [callAccepted, callEnded, call]);
+  }, [callAccepted, callEnded, call, userVideoRef]);
 
   return (
     <Grid container justifyContent="center" alignItems="center">
